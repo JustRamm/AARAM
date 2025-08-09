@@ -25,27 +25,52 @@ class _HomeScreenState extends State<HomeScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
+        elevation: 2,
+        shadowColor: Colors.black.withOpacity(0.1),
         title: Row(
           children: [
-            Image.asset(
-              'assets/icons/ChatGPT Image Aug 8, 2025, 04_57_08 PM.png',
-              width: 32,
-              height: 32,
-            ),
-            const SizedBox(width: 12),
-            Text(
-              themeProvider.getText('dashboard'),
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
                 color: const Color(0xFF1E3A8A),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Image.asset(
+                'assets/icons/ChatGPT Image Aug 8, 2025, 04_57_08 PM.png',
+                width: 24,
+                height: 24,
+                color: Colors.white,
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    themeProvider.getText('dashboard'),
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF1E3A8A),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    'Official Government Portal',
+                    style: GoogleFonts.poppins(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
             GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
@@ -60,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: const Icon(
                   Icons.folder_open,
-                  size: 24,
+                  size: 20,
                   color: Color(0xFF1E3A8A),
                 ),
               ),
@@ -130,8 +155,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Welcome Section
-          _buildWelcomeSection(authProvider, themeProvider),
+          // Government Branding Section
+          _buildGovernmentBranding(themeProvider),
           
           const SizedBox(height: 24),
           
@@ -159,34 +184,93 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildWelcomeSection(AuthProvider authProvider, ThemeProvider themeProvider) {
+  Widget _buildGovernmentBranding(ThemeProvider themeProvider) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6)],
+          colors: [Color(0xFF1E3A8A), Color(0xFF2563EB)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF1E3A8A).withOpacity(0.2),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '${themeProvider.getText('welcome_back')}, ${authProvider.userName ?? 'User'}!',
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.verified,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Government of India',
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      'Digital India Initiative',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: Colors.white.withOpacity(0.9),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            themeProvider.getText('manage_documents'),
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              color: Colors.white.withOpacity(0.9),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.white.withOpacity(0.2)),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.security,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Secure • Verified • Official',
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -198,12 +282,30 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          themeProvider.getText('document_expiry_overview'),
-          style: GoogleFonts.poppins(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E3A8A).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: const Icon(
+                Icons.schedule,
+                color: Color(0xFF1E3A8A),
+                size: 16,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              themeProvider.getText('document_expiry_overview'),
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF1E293B),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 16),
         Row(
@@ -214,6 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 count: '3',
                 color: Colors.orange,
                 icon: Icons.warning,
+                subtitle: 'Next 30 days',
               ),
             ),
             const SizedBox(width: 12),
@@ -223,6 +326,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 count: '12',
                 color: Colors.green,
                 icon: Icons.check_circle,
+                subtitle: 'Valid documents',
               ),
             ),
             const SizedBox(width: 12),
@@ -232,6 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 count: '1',
                 color: Colors.red,
                 icon: Icons.error,
+                subtitle: 'Needs renewal',
               ),
             ),
           ],
@@ -245,6 +350,7 @@ class _HomeScreenState extends State<HomeScreen> {
     required String count,
     required Color color,
     required IconData icon,
+    required String subtitle,
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -261,7 +367,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Column(
         children: [
-          Icon(icon, color: color, size: 24),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: color, size: 20),
+          ),
           const SizedBox(height: 8),
           Text(
             count,
@@ -276,6 +389,16 @@ class _HomeScreenState extends State<HomeScreen> {
             title,
             style: GoogleFonts.poppins(
               fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFF1E293B),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            subtitle,
+            style: GoogleFonts.poppins(
+              fontSize: 10,
               color: Colors.grey.shade600,
             ),
             textAlign: TextAlign.center,
@@ -289,12 +412,30 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          themeProvider.getText('quick_actions'),
-          style: GoogleFonts.poppins(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E3A8A).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: const Icon(
+                Icons.flash_on,
+                color: Color(0xFF1E3A8A),
+                size: 16,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              themeProvider.getText('quick_actions'),
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF1E293B),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 16),
         Row(
@@ -348,7 +489,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Column(
           children: [
-            Icon(icon, color: color, size: 24),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: color, size: 20),
+            ),
             const SizedBox(height: 8),
             Text(
               text,
@@ -369,12 +517,30 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          themeProvider.getText('recent_applications'),
-          style: GoogleFonts.poppins(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E3A8A).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: const Icon(
+                Icons.history,
+                color: Color(0xFF1E3A8A),
+                size: 16,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              themeProvider.getText('recent_applications'),
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF1E293B),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 16),
         Column(
@@ -384,6 +550,7 @@ class _HomeScreenState extends State<HomeScreen> {
               status: themeProvider.getText('in_progress'),
               date: '2 days ago',
               statusColor: Colors.orange,
+              icon: Icons.fingerprint,
             ),
             const SizedBox(height: 12),
             _buildApplicationItem(
@@ -391,6 +558,7 @@ class _HomeScreenState extends State<HomeScreen> {
               status: themeProvider.getText('completed_status'),
               date: '1 week ago',
               statusColor: Colors.green,
+              icon: Icons.credit_card,
             ),
             const SizedBox(height: 12),
             _buildApplicationItem(
@@ -398,6 +566,7 @@ class _HomeScreenState extends State<HomeScreen> {
               status: themeProvider.getText('pending'),
               date: '3 days ago',
               statusColor: Colors.blue,
+              icon: Icons.drive_eta,
             ),
           ],
         ),
@@ -410,6 +579,7 @@ class _HomeScreenState extends State<HomeScreen> {
     required String status,
     required String date,
     required Color statusColor,
+    required IconData icon,
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -427,12 +597,12 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         children: [
           Container(
-            width: 8,
-            height: 8,
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: statusColor,
-              shape: BoxShape.circle,
+              color: statusColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
             ),
+            child: Icon(icon, color: statusColor, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -478,15 +648,34 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildGovernmentDocumentsGrid(ThemeProvider themeProvider) {
+    final documents = _getGovernmentDocuments(themeProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          themeProvider.getText('government_documents'),
-          style: GoogleFonts.poppins(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E3A8A).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: const Icon(
+                Icons.account_balance,
+                color: Color(0xFF1E3A8A),
+                size: 16,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              themeProvider.getText('government_documents'),
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF1E293B),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 16),
         GridView.builder(
@@ -498,13 +687,54 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSpacing: 12,
             childAspectRatio: 1.2,
           ),
-          itemCount: _governmentDocuments.length,
+          itemCount: documents.length,
           itemBuilder: (context, index) {
-            return _buildDocumentCard(_governmentDocuments[index], themeProvider);
+            return _buildDocumentCard(documents[index], themeProvider);
           },
         ),
       ],
     );
+  }
+
+  List<Map<String, dynamic>> _getGovernmentDocuments(ThemeProvider themeProvider) {
+    return [
+      {
+        'title': themeProvider.getText('aadhaar_card'),
+        'icon': Icons.fingerprint,
+        'color': Colors.orange,
+        'officialWebsite': 'https://uidai.gov.in',
+      },
+      {
+        'title': themeProvider.getText('pan_card'),
+        'icon': Icons.credit_card,
+        'color': Colors.blue,
+        'officialWebsite': 'https://www.incometax.gov.in',
+      },
+      {
+        'title': themeProvider.getText('driving_license'),
+        'icon': Icons.drive_eta,
+        'color': Colors.green,
+        'officialWebsite': 'https://sarathi.parivahan.gov.in',
+      },
+      {
+        'title': themeProvider.getText('passport'),
+        'icon': Icons.book,
+        'color': Colors.purple,
+        'officialWebsite': 'https://passportindia.gov.in',
+      },
+      {
+        'title': themeProvider.getText('voter_id'),
+        'icon': Icons.how_to_vote,
+        'color': Colors.red,
+        'officialWebsite': 'https://voterportal.eci.gov.in',
+      },
+      {
+        'title': themeProvider.getText('birth_certificate'),
+        'icon': Icons.description,
+        'color': Colors.teal,
+        'officialWebsite': 'https://crsorgi.gov.in',
+      },
+    ];
   }
 
   Widget _buildDocumentCard(Map<String, dynamic> document, ThemeProvider themeProvider) {
@@ -537,17 +767,34 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              document['icon'],
-              color: document['color'],
-              size: 32,
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: document['color'].withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                document['icon'],
+                color: document['color'],
+                size: 28,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Text(
               document['title'],
               style: GoogleFonts.poppins(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
+                color: const Color(0xFF1E293B),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Official Portal',
+              style: GoogleFonts.poppins(
+                fontSize: 10,
+                color: Colors.grey.shade600,
               ),
               textAlign: TextAlign.center,
             ),
@@ -568,6 +815,8 @@ class _HomeScreenState extends State<HomeScreen> {
       type: BottomNavigationBarType.fixed,
       selectedItemColor: const Color(0xFF1E3A8A),
       unselectedItemColor: Colors.grey,
+      backgroundColor: Colors.white,
+      elevation: 8,
       items: [
         BottomNavigationBarItem(
           icon: const Icon(Icons.home),
@@ -585,42 +834,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  final List<Map<String, dynamic>> _governmentDocuments = [
-    {
-      'title': 'Aadhaar',
-      'icon': Icons.fingerprint,
-      'color': Colors.orange,
-      'officialWebsite': 'https://uidai.gov.in',
-    },
-    {
-      'title': 'PAN Card',
-      'icon': Icons.credit_card,
-      'color': Colors.blue,
-      'officialWebsite': 'https://www.incometax.gov.in',
-    },
-    {
-      'title': 'Driving License',
-      'icon': Icons.drive_eta,
-      'color': Colors.green,
-      'officialWebsite': 'https://sarathi.parivahan.gov.in',
-    },
-    {
-      'title': 'Passport',
-      'icon': Icons.book,
-      'color': Colors.purple,
-      'officialWebsite': 'https://passportindia.gov.in',
-    },
-    {
-      'title': 'Voter ID',
-      'icon': Icons.how_to_vote,
-      'color': Colors.red,
-      'officialWebsite': 'https://voterportal.eci.gov.in',
-    },
-    {
-      'title': 'Birth Certificate',
-      'icon': Icons.description,
-      'color': Colors.teal,
-      'officialWebsite': 'https://crsorgi.gov.in',
-    },
-  ];
+
 } 

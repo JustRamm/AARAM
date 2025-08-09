@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../widgets/custom_button.dart';
 import '../utils/responsive_utils.dart';
+import '../providers/theme_provider.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
 import 'digilocker_connect_screen.dart';
@@ -16,6 +18,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -55,7 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               
               // Welcome Text
               Text(
-                'Welcome to AARAM',
+                themeProvider.getText('welcome_to_aaram'),
                 style: GoogleFonts.poppins(
                   fontSize: 32,
                   fontWeight: FontWeight.w800,
@@ -67,7 +70,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               const SizedBox(height: 12),
               
               Text(
-                'Your AI-Powered Government\nDocument Manager',
+                themeProvider.getText('your_personal_ai'),
                 style: GoogleFonts.poppins(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -90,7 +93,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                 ),
                 child: Text(
-                  'Automated Application & Records Assistant Manager',
+                  themeProvider.getText('app_subtitle'),
                   style: GoogleFonts.poppins(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -115,7 +118,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     width: double.infinity,
                     height: 56,
                     child: CustomButton(
-                      text: 'Get Started',
+                      text: themeProvider.getText('get_started'),
                       onPressed: () {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -133,7 +136,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     children: [
                       Expanded(
                         child: _buildSecondaryButton(
-                          text: 'Sign Up',
+                          text: themeProvider.getText('sign_up'),
                           icon: Icons.person_add,
                           onPressed: () {
                             Navigator.of(context).pushReplacement(
@@ -145,7 +148,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: _buildSecondaryButton(
-                          text: 'DigiLocker',
+                          text: themeProvider.getText('digilocker'),
                           icon: Icons.folder_open,
                           onPressed: () {
                             Navigator.of(context).pushReplacement(
@@ -178,16 +181,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           size: 20,
                         ),
                         const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'Choose your preferred way to get started. You can always change your settings later.',
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              color: Colors.grey.shade700,
-                              height: 1.4,
-                            ),
-                          ),
-                        ),
+                                                 Expanded(
+                           child: Text(
+                             themeProvider.getText('choose_preferred_way'),
+                             style: GoogleFonts.poppins(
+                               fontSize: 12,
+                               color: Colors.grey.shade700,
+                               height: 1.4,
+                             ),
+                           ),
+                         ),
                       ],
                     ),
                   ),
@@ -203,29 +206,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   Widget _buildFeaturesList() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     final features = [
       {
         'icon': Icons.shield,
-        'title': 'Secure Document Storage',
-        'description': 'End-to-end encrypted vault for all your government documents',
+        'title': themeProvider.getText('secure_document_storage'),
+        'description': themeProvider.getText('secure_document_storage_desc'),
         'color': Colors.green,
       },
       {
         'icon': Icons.auto_awesome,
-        'title': 'AI-Powered Form Filling',
-        'description': 'Automatically fill forms using your verified documents',
+        'title': themeProvider.getText('ai_powered_form_filling'),
+        'description': themeProvider.getText('ai_powered_form_filling_desc'),
         'color': Colors.blue,
       },
       {
         'icon': Icons.notifications_active,
-        'title': 'Smart Expiry Tracking',
-        'description': 'Never miss a document renewal with timely reminders',
+        'title': themeProvider.getText('smart_expiry_tracking'),
+        'description': themeProvider.getText('smart_expiry_tracking_desc'),
         'color': Colors.orange,
       },
       {
         'icon': Icons.track_changes,
-        'title': 'Real-Time Updates',
-        'description': 'Track application status with live notifications',
+        'title': themeProvider.getText('real_time_updates'),
+        'description': themeProvider.getText('real_time_updates_desc'),
         'color': Colors.purple,
       },
     ];

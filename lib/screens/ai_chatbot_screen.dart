@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
+import '../services/ai_service.dart';
 import '../utils/responsive_utils.dart';
 
 class AiChatbotScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class _AiChatbotScreenState extends State<AiChatbotScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<ChatMessage> _messages = [];
   bool _isTyping = false;
+  final AIService _aiService = AIService();
 
   @override
   void initState() {
@@ -392,7 +394,7 @@ class _AiChatbotScreenState extends State<AiChatbotScreen> {
 
     _messageController.clear();
     _addUserMessage(message);
-    _simulateAIResponse(message);
+    _getAIResponse(message);
   }
 
   void _sendQuickMessage(String action) {
@@ -424,7 +426,7 @@ class _AiChatbotScreenState extends State<AiChatbotScreen> {
         break;
     }
     _addUserMessage(message);
-    _simulateAIResponse(message);
+    _getAIResponse(message);
   }
 
   void _addUserMessage(String text) {
@@ -436,6 +438,37 @@ class _AiChatbotScreenState extends State<AiChatbotScreen> {
       ));
     });
     _scrollToBottom();
+  }
+
+  void _getAIResponse(String userMessage) async {
+    setState(() {
+      _isTyping = true;
+    });
+
+    try {
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+      final aiResponse = await _aiService.getAIResponse(userMessage, themeProvider.currentLanguage);
+      
+      setState(() {
+        _isTyping = false;
+        _messages.add(ChatMessage(
+          text: aiResponse.message,
+          isUser: false,
+          timestamp: DateTime.now(),
+        ));
+      });
+      _scrollToBottom();
+    } catch (e) {
+      setState(() {
+        _isTyping = false;
+        _messages.add(ChatMessage(
+          text: 'Sorry, I encountered an error. Please try again.',
+          isUser: false,
+          timestamp: DateTime.now(),
+        ));
+      });
+      _scrollToBottom();
+    }
   }
 
   void _simulateAIResponse(String userMessage) {

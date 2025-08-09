@@ -19,6 +19,8 @@ dependencies:
   url_launcher: ^6.2.1
   lottie: ^2.7.0
   smooth_page_indicator: ^1.1.0
+  dio: ^5.4.0
+  json_annotation: ^4.8.1
 
 dev_dependencies:
   flutter_test:

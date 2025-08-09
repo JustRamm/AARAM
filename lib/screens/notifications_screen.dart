@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import '../providers/theme_provider.dart';
 import '../utils/responsive_utils.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -10,10 +12,20 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
-  String _selectedFilter = 'All';
+  String _selectedFilter = 'All'; // This will be updated dynamically
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    
+    // Refresh notifications when language changes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_notifications.isNotEmpty && 
+          _notifications[0]['title'] != themeProvider.getText('notification_item_title')) {
+        _refreshNotifications();
+      }
+    });
+    
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
@@ -32,7 +44,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Notifications',
+          themeProvider.getText('notifications'),
           style: GoogleFonts.poppins(
             fontSize: ResponsiveUtils.getPlatformAdjustedFontSize(context, 
               ResponsiveUtils.isMobile(context) ? 18 : 
@@ -74,6 +86,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   Widget _buildFilterSection() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Container(
       padding: ResponsiveUtils.getResponsivePadding(context),
       color: Colors.white,
@@ -81,7 +94,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Filter Notifications',
+            themeProvider.getText('filter_notifications'),
             style: GoogleFonts.poppins(
               fontSize: ResponsiveUtils.getPlatformAdjustedFontSize(context, 
                 ResponsiveUtils.isMobile(context) ? 14 : 
@@ -96,15 +109,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                _buildFilterChip('All', Icons.all_inclusive),
+                _buildFilterChip(themeProvider.getText('all'), Icons.all_inclusive),
                 SizedBox(width: ResponsiveUtils.getPlatformAdjustedSpacing(context, 8)),
-                _buildFilterChip('Expiry', Icons.warning),
+                _buildFilterChip(themeProvider.getText('expiry'), Icons.warning),
                 SizedBox(width: ResponsiveUtils.getPlatformAdjustedSpacing(context, 8)),
-                _buildFilterChip('Status', Icons.track_changes),
+                _buildFilterChip(themeProvider.getText('status'), Icons.track_changes),
                 SizedBox(width: ResponsiveUtils.getPlatformAdjustedSpacing(context, 8)),
-                _buildFilterChip('Updates', Icons.update),
+                _buildFilterChip(themeProvider.getText('updates'), Icons.update),
                 SizedBox(width: ResponsiveUtils.getPlatformAdjustedSpacing(context, 8)),
-                _buildFilterChip('Security', Icons.security),
+                _buildFilterChip(themeProvider.getText('security'), Icons.security),
               ],
             ),
           ),
@@ -188,6 +201,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   Widget _buildEmptyState() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -225,7 +239,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
           SizedBox(height: ResponsiveUtils.getPlatformAdjustedSpacing(context, 24)),
           Text(
-            'No notifications',
+            themeProvider.getText('no_notifications'),
             style: GoogleFonts.poppins(
               fontSize: ResponsiveUtils.getPlatformAdjustedFontSize(context, 
                 ResponsiveUtils.isMobile(context) ? 18 : 
@@ -237,7 +251,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
           SizedBox(height: ResponsiveUtils.getPlatformAdjustedSpacing(context, 8)),
           Text(
-            'You\'re all caught up!',
+            themeProvider.getText('no_notifications_desc'),
             style: GoogleFonts.poppins(
               fontSize: ResponsiveUtils.getPlatformAdjustedFontSize(context, 
                 ResponsiveUtils.isMobile(context) ? 14 : 
@@ -375,6 +389,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   void _showNotificationOptions() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -404,7 +419,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             SizedBox(height: ResponsiveUtils.getPlatformAdjustedSpacing(context, 20)),
             _buildOptionItem(
               icon: Icons.mark_email_read,
-              title: 'Mark all as read',
+              title: themeProvider.getText('mark_all_as_read'),
               onTap: () {
                 Navigator.pop(context);
                 _markAllAsRead();
@@ -412,7 +427,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             ),
             _buildOptionItem(
               icon: Icons.delete_sweep,
-              title: 'Clear all notifications',
+              title: themeProvider.getText('clear_all_notifications'),
               onTap: () {
                 Navigator.pop(context);
                 _clearAllNotifications();
@@ -420,7 +435,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             ),
             _buildOptionItem(
               icon: Icons.settings,
-              title: 'Notification settings',
+              title: themeProvider.getText('notification_settings'),
               onTap: () {
                 Navigator.pop(context);
                 _openNotificationSettings();
@@ -474,43 +489,47 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   void _markAllAsRead() {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     setState(() {
       for (var notification in _notifications) {
         notification['isUnread'] = false;
       }
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('All notifications marked as read'),
+      SnackBar(
+        content: Text(themeProvider.getText('all_notifications_marked_read')),
         backgroundColor: Colors.green,
       ),
     );
   }
 
   void _clearAllNotifications() {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     setState(() {
       _notifications.clear();
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('All notifications cleared'),
+      SnackBar(
+        content: Text(themeProvider.getText('all_notifications_cleared')),
         backgroundColor: Colors.orange,
       ),
     );
   }
 
   void _openNotificationSettings() {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     // TODO: Navigate to notification settings
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Opening notification settings...'),
+      SnackBar(
+        content: Text(themeProvider.getText('opening_notification_settings')),
         backgroundColor: Colors.blue,
       ),
     );
   }
 
   List<Map<String, dynamic>> _getFilteredNotifications() {
-    if (_selectedFilter == 'All') {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    if (_selectedFilter == themeProvider.getText('all')) {
       return _notifications;
     }
     return _notifications.where((notification) {
@@ -518,79 +537,51 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }).toList();
   }
 
-  // Dummy notifications data
-  final List<Map<String, dynamic>> _notifications = [
-    {
-      'title': 'Aadhaar Card Expiring Soon',
-      'message': 'Your Aadhaar card will expire in 30 days. Renew it now to avoid any inconvenience.',
-      'type': 'Expiry',
-      'time': '2 hours ago',
-      'isUnread': true,
-      'icon': Icons.warning,
-      'color': Colors.orange,
-    },
-    {
-      'title': 'PAN Card Application Approved',
-      'message': 'Congratulations! Your PAN card application has been approved. You will receive it within 7-10 days.',
-      'type': 'Status',
-      'time': '1 day ago',
-      'isUnread': true,
-      'icon': Icons.check_circle,
-      'color': Colors.green,
-    },
-    {
-      'title': 'Driving License Renewal Due',
-      'message': 'Your driving license expires next month. Complete the renewal process to maintain validity.',
-      'type': 'Expiry',
-      'time': '2 days ago',
-      'isUnread': false,
-      'icon': Icons.directions_car,
-      'color': Colors.red,
-    },
-    {
-      'title': 'New Document Uploaded',
-      'message': 'A new document has been uploaded to your DigiLocker. Check your document vault.',
-      'type': 'Updates',
-      'time': '3 days ago',
-      'isUnread': false,
-      'icon': Icons.upload_file,
-      'color': Colors.blue,
-    },
-    {
-      'title': 'Security Alert',
-      'message': 'New login detected from a new device. If this wasn\'t you, please change your password immediately.',
-      'type': 'Security',
-      'time': '1 week ago',
-      'isUnread': false,
-      'icon': Icons.security,
-      'color': Colors.red,
-    },
-    {
-      'title': 'Passport Application Status',
-      'message': 'Your passport application is under review. Expected completion time: 15-20 working days.',
-      'type': 'Status',
-      'time': '1 week ago',
-      'isUnread': false,
-      'icon': Icons.flight,
-      'color': Colors.purple,
-    },
-    {
-      'title': 'Voter ID Update Available',
-      'message': 'You can now update your address in your Voter ID card. Click here to proceed.',
-      'type': 'Updates',
-      'time': '2 weeks ago',
-      'isUnread': false,
-      'icon': Icons.how_to_vote,
-      'color': Colors.indigo,
-    },
-    {
-      'title': 'Birth Certificate Verification',
-      'message': 'Your birth certificate has been successfully verified and is now available in your document vault.',
-      'type': 'Status',
-      'time': '2 weeks ago',
-      'isUnread': false,
-      'icon': Icons.child_care,
-      'color': Colors.teal,
-    },
-  ];
+  // Dummy notifications data - will be populated with translated strings
+  List<Map<String, dynamic>> _notifications = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeNotifications();
+  }
+
+  void _initializeNotifications() {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    _notifications = [
+      {
+        'title': themeProvider.getText('notification_item_title'),
+        'message': themeProvider.getText('notification_item_desc'),
+        'type': themeProvider.getText('expiry'),
+        'time': themeProvider.getText('notification_time'),
+        'isUnread': true,
+        'icon': Icons.warning,
+        'color': Colors.orange,
+      },
+      {
+        'title': themeProvider.getText('notification_item_title2'),
+        'message': themeProvider.getText('notification_item_desc2'),
+        'type': themeProvider.getText('status'),
+        'time': themeProvider.getText('notification_time2'),
+        'isUnread': true,
+        'icon': Icons.check_circle,
+        'color': Colors.green,
+      },
+      {
+        'title': themeProvider.getText('notification_item_title3'),
+        'message': themeProvider.getText('notification_item_desc3'),
+        'type': themeProvider.getText('security'),
+        'time': themeProvider.getText('notification_time3'),
+        'isUnread': false,
+        'icon': Icons.security,
+        'color': Colors.red,
+      },
+    ];
+  }
+
+  void _refreshNotifications() {
+    setState(() {
+      _initializeNotifications();
+    });
+  }
 }

@@ -91,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     await Future.delayed(const Duration(milliseconds: 200));
     _textController.forward();
 
-    await Future.delayed(const Duration(milliseconds: 30000));
+    await Future.delayed(const Duration(milliseconds: 10000));
     if (mounted) {
       _navigateToNextScreen();
     }

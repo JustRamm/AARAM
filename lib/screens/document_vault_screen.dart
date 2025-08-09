@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../providers/theme_provider.dart';
 import 'document_detail_screen.dart';
 
 class DocumentVaultScreen extends StatefulWidget {
