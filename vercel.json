@@ -4,7 +4,6 @@
   "outputDirectory": "build/web",
   "installCommand": "flutter pub get",
   "framework": null,
-  "functions": {},
   "routes": [
     {
       "src": "/(.*)",
