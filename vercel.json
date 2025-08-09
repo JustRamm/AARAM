@@ -1,11 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "bash vercel-build-basic.sh",
-  "outputDirectory": "build/web",
-  "installCommand": "echo 'Flutter will be installed during build'",
   "framework": null,
   "functions": {
-    "build/web/**/*.js": {
+    "build/web//*.js": {
       "runtime": "nodejs18.x"
     }
   },
@@ -17,7 +14,7 @@
   ],
   "headers": [
     {
-      "source": "/**",
+      "source": "/",
       "headers": [
         {
           "key": "Cache-Control",
