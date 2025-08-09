@@ -44,5 +44,6 @@
     "env": {
       "FLUTTER_VERSION": "3.32.8"
     }
-  }
+  },
+  "public": "build/web"
 }
