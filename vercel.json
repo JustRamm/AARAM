@@ -1,11 +1,6 @@
 {
   "version": 2,
   "framework": null,
-  "functions": {
-    "build/web/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/(.*)",
