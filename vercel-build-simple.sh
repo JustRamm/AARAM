@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Starting AARAM Flutter Web Build on Vercel..."
+echo "🚀 Starting AARAM Flutter Web Build (Simplified)..."
 echo "🕐 Build timestamp: $(date)"
 
 # Configure Git to handle ownership issues
@@ -15,7 +15,7 @@ git config --global user.name "JustRamm" || true
 echo "🧹 Cleaning up any existing Flutter installation..."
 rm -rf flutter || true
 
-# Install Flutter using the official installation method
+# Install Flutter using direct download
 echo "📦 Installing Flutter..."
 FLUTTER_VERSION="3.32.8"
 FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_$FLUTTER_VERSION-stable.tar.xz"
@@ -27,14 +27,16 @@ curl -sSL $FLUTTER_URL | tar xJ
 # Add Flutter to PATH
 export PATH="$PATH:`pwd`/flutter/bin"
 
-# Fix Git ownership issues for Flutter repository
+# Disable Git operations in Flutter to avoid ownership issues
 if [ -d "flutter" ]; then
-    echo "🔧 Fixing Git ownership for Flutter repository..."
+    echo "🔧 Disabling Git operations in Flutter..."
     cd flutter
     git config --global --add safe.directory `pwd` || true
     git config --global --add safe.directory /vercel/path0/flutter || true
     git config --global --add safe.directory /vercel/path0 || true
-    git config --global --add safe.directory /vercel/path0/flutter/bin || true
+    # Disable Git version checking
+    export FLUTTER_GIT_URL=""
+    export FLUTTER_STORAGE_BASE_URL=""
     cd ..
 fi
 

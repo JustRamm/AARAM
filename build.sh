@@ -4,16 +4,31 @@ set -e
 
 echo "🚀 Starting AARAM Flutter Web Build..."
 
+# Configure Git for Vercel environment
+echo "🔧 Configuring Git for deployment environment..."
+git config --global --add safe.directory '*' || true
+git config --global user.email "deploy@example.com" || true
+git config --global user.name "Deploy Bot" || true
+
 # Install Flutter if not already installed
 if ! command -v flutter &> /dev/null; then
     echo "📦 Installing Flutter..."
     
-    # Download Flutter
-    git clone https://github.com/flutter/flutter.git -b stable
+    # Download Flutter using curl (more reliable than git clone)
+    FLUTTER_VERSION="3.32.8"
+    FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_$FLUTTER_VERSION-stable.tar.xz"
+    
+    echo "📥 Downloading Flutter $FLUTTER_VERSION..."
+    curl -sSL $FLUTTER_URL | tar xJ
     export PATH="$PATH:`pwd`/flutter/bin"
     
-    # Pre-download Dart SDK
-    flutter doctor --android-licenses || true
+    # Fix Git ownership issues for Flutter repository
+    if [ -d "flutter" ]; then
+        echo "🔧 Fixing Git ownership for Flutter repository..."
+        cd flutter
+        git config --global --add safe.directory `pwd` || true
+        cd ..
+    fi
 fi
 
 echo "✅ Flutter version:"
