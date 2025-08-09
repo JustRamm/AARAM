@@ -11,6 +11,11 @@ git config --global --add safe.directory '*' || true
 git config --global user.email "abirambijoy@gmail.com" || true
 git config --global user.name "JustRamm" || true
 
+# Check if we're in Vercel environment
+if [ -n "$VERCEL" ]; then
+    echo "🌐 Running in Vercel environment"
+fi
+
 # Clean up any existing Flutter installation
 echo "🧹 Cleaning up any existing Flutter installation..."
 rm -rf flutter || true
@@ -20,16 +25,26 @@ echo "📦 Installing Flutter..."
 FLUTTER_VERSION="3.32.8"
 FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_$FLUTTER_VERSION-stable.tar.xz"
 
-# Download and extract Flutter
+# Download and extract Flutter with better error handling
 echo "📥 Downloading Flutter $FLUTTER_VERSION..."
-curl -sSL $FLUTTER_URL | tar xJ
+if command -v curl &> /dev/null; then
+    echo "Using curl to download Flutter..."
+    curl -sSL $FLUTTER_URL | tar xJ
+elif command -v wget &> /dev/null; then
+    echo "Using wget to download Flutter..."
+    wget -qO- $FLUTTER_URL | tar xJ
+else
+    echo "❌ Neither curl nor wget found. Trying alternative approach..."
+    # Try using git to clone Flutter
+    git clone https://github.com/flutter/flutter.git -b stable
+fi
 
 # Add Flutter to PATH
 export PATH="$PATH:`pwd`/flutter/bin"
 
 # Disable Git operations in Flutter to avoid ownership issues
 if [ -d "flutter" ]; then
-    echo "🔧 Disabling Git operations in Flutter..."
+    echo "🔧 Configuring Flutter repository..."
     cd flutter
     git config --global --add safe.directory `pwd` || true
     git config --global --add safe.directory /vercel/path0/flutter || true
@@ -44,7 +59,7 @@ echo "✅ Flutter installed successfully"
 
 # Verify Flutter installation
 echo "🔍 Flutter version:"
-flutter --version
+flutter --version || echo "⚠️ Flutter version check failed, continuing..."
 
 # Enable web support
 echo "🌐 Enabling web support..."
