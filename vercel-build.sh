@@ -3,6 +3,7 @@
 set -e
 
 echo "🚀 Starting AARAM Flutter Web Build on Vercel..."
+echo "🕐 Build timestamp: $(date)"
 
 # Install Flutter using the official installation method
 if ! command -v flutter &> /dev/null; then
