@@ -2,7 +2,7 @@
   "version": 2,
   "framework": null,
   "functions": {
-    "build/web//*.js": {
+    "build/web/*.js": {
       "runtime": "nodejs18.x"
     }
   },
@@ -40,10 +40,10 @@
       ]
     }
   ],
-  "build": {
-    "env": {
-      "FLUTTER_VERSION": "3.32.8"
+  "builds": [
+    {
+      "src": "build/web/**",
+      "use": "@vercel/static"
     }
-  },
-  "public": "build/web"
+  ]
 }
