@@ -1,0 +1,27 @@
+{
+  "name": "aaram-document-manager",
+  "version": "1.0.0",
+  "description": "AI-Powered Government Document Manager with DigiLocker Integration",
+  "scripts": {
+    "build": "flutter build web --release",
+    "dev": "flutter run -d chrome",
+    "clean": "flutter clean",
+    "get": "flutter pub get"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JustRamm/AARAM.git"
+  },
+  "keywords": [
+    "flutter",
+    "government",
+    "documents",
+    "digilocker",
+    "ai"
+  ],
+  "author": "AARAM Team",
+  "license": "MIT"
+}
