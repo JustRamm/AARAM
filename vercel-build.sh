@@ -8,13 +8,17 @@ echo "🚀 Starting AARAM Flutter Web Build on Vercel..."
 if ! command -v flutter &> /dev/null; then
     echo "📦 Installing Flutter..."
     
-    # Download Flutter SDK
-    FLUTTER_VERSION="3.19.0"
+    # Download Flutter SDK (latest stable)
+    FLUTTER_VERSION="3.32.8"
     FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_$FLUTTER_VERSION-stable.tar.xz"
     
     # Download and extract Flutter
     wget -qO- $FLUTTER_URL | tar xJ
     export PATH="$PATH:`pwd`/flutter/bin"
+    
+    # Fix Git ownership issues
+    git config --global --add safe.directory /vercel/path0/flutter || true
+    git config --global --add safe.directory `pwd`/flutter || true
     
     echo "✅ Flutter installed successfully"
 fi
