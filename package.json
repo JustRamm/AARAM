@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "AI-Powered Government Document Manager with DigiLocker Integration",
   "scripts": {
-    "build": "flutter build web --release",
+    "build": "bash vercel-build-simple.sh",
     "dev": "flutter run -d chrome",
     "clean": "flutter clean",
-    "get": "flutter pub get"
+    "get": "flutter pub get",
+    "vercel-build": "bash vercel-build-simple.sh"
   },
   "engines": {
     "node": ">=16.0.0"

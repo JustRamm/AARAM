@@ -69,9 +69,12 @@ flutter config --enable-web
 echo "📚 Getting dependencies..."
 flutter pub get
 
-# Build web version
+# Build web version with proper renderer
 echo "🔨 Building web version..."
-flutter build web --release
+flutter build web --release --web-renderer html --dart-define=FLUTTER_WEB_USE_SKIA=false
 
 echo "✅ Build completed successfully!"
+echo "📁 Build output:"
 ls -la build/web/
+echo "📄 Checking for main.dart.js:"
+ls -la build/web/main.dart.js || echo "❌ main.dart.js not found!"

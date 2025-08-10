@@ -1,11 +1,9 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "build/web/index.html",
-      "use": "@vercel/static"
-    }
-  ],
+  "buildCommand": "bash vercel-build-simple.sh",
+  "outputDirectory": "build/web",
+  "installCommand": "echo 'Flutter will be installed during build'",
+  "framework": null,
   "routes": [
     {
       "src": "/(.*)",
