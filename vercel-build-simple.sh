@@ -20,38 +20,21 @@ fi
 echo "🧹 Cleaning up any existing Flutter installation..."
 rm -rf flutter || true
 
-# Install Flutter using direct download
+# Install Flutter using git clone (more reliable)
 echo "📦 Installing Flutter..."
-FLUTTER_VERSION="3.32.8"
-FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_$FLUTTER_VERSION-stable.tar.xz"
-
-# Download and extract Flutter with better error handling
-echo "📥 Downloading Flutter $FLUTTER_VERSION..."
-if command -v curl &> /dev/null; then
-    echo "Using curl to download Flutter..."
-    curl -sSL $FLUTTER_URL | tar xJ
-elif command -v wget &> /dev/null; then
-    echo "Using wget to download Flutter..."
-    wget -qO- $FLUTTER_URL | tar xJ
-else
-    echo "❌ Neither curl nor wget found. Trying alternative approach..."
-    # Try using git to clone Flutter
-    git clone https://github.com/flutter/flutter.git -b stable
-fi
+echo "Cloning Flutter repository..."
+git clone https://github.com/flutter/flutter.git -b stable --depth 1
 
 # Add Flutter to PATH
 export PATH="$PATH:`pwd`/flutter/bin"
 
-# Disable Git operations in Flutter to avoid ownership issues
+# Configure Flutter repository
 if [ -d "flutter" ]; then
     echo "🔧 Configuring Flutter repository..."
     cd flutter
     git config --global --add safe.directory `pwd` || true
     git config --global --add safe.directory /vercel/path0/flutter || true
     git config --global --add safe.directory /vercel/path0 || true
-    # Disable Git version checking
-    export FLUTTER_GIT_URL=""
-    export FLUTTER_STORAGE_BASE_URL=""
     cd ..
 fi
 
@@ -69,9 +52,9 @@ flutter config --enable-web
 echo "📚 Getting dependencies..."
 flutter pub get
 
-# Build web version with proper renderer
+# Build web version with simpler configuration
 echo "🔨 Building web version..."
-flutter build web --release --web-renderer html --dart-define=FLUTTER_WEB_USE_SKIA=false
+flutter build web --release
 
 echo "✅ Build completed successfully!"
 echo "📁 Build output:"
